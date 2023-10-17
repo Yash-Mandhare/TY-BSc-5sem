@@ -6,92 +6,88 @@ myshells search c filename pattern: It will count the number of occurrence of pa
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-char *buff, *t1, *t2, *t3, *t4, ch;
-FILE *fp;
-int pid;
-void search(char *t2, char *t3, char *t4)
-{
-    int i = 1, count = 0;
-    char *p;
-    if ((fp = fopen(t3, "r")) == NULL)
-        printf("File not found\n");
-    else
-    {
-        if (strcmp(t2, "f") == 0)
-        {
-            while (fgets(buff, 80, fp))
-            {
-                if ((strstr(buff, t4)) != NULL)
-                {
-                    printf("%d: %s\n", i, buff);
-                    break;
-                }
-            }
-            i++;
-        }
-        else if (strcmp(t2, "c") == 0)
-        {
-            while (fgets(buff, 80, fp))
-            {
-                if ((strstr(buff, t4)) != NULL)
-                {
-                    count++;
-                }
-            }
-            printf("No of occurences of %s= %d\n", t3, count);
-        }
-        else if (strcmp(t2, "a") == 0)
-        {
-            while (fgets(buff, 80, fp))
-            {
-                if ((strstr(buff, t4)) != NULL)
-                {
-                    printf("%d: %s\n", i, buff);
-                }
-                i++;
-            }
-        }
-        else
-            printf("Command not found\n");
-        fclose(fp);
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+#define MAX_INPUT_SIZE 1024
+#define MAX_TOKENS 100
+
+void search_pattern(const char *filename, const char *pattern, int find_first, int find_all, int count) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
     }
+
+    char line[MAX_INPUT_SIZE];
+    int line_number = 0;
+    int pattern_count = 0;
+
+    while (fgets(line, MAX_INPUT_SIZE, file) != NULL) {
+        line_number++;
+        if (strstr(line, pattern) != NULL) {
+            pattern_count++;
+            if (find_first) {
+                printf("%s: Line %d: %s", filename, line_number, line);
+                break;
+            } else if (find_all) {
+                printf("%s: Line %d: %s", filename, line_number, line);
+            }
+        }
+    }
+
+    if (count) {
+        printf("Pattern '%s' found %d times in %s.\n", pattern, pattern_count, filename);
+    }
+
+    fclose(file);
 }
-main()
-{
-    while (1)
-    {
-        printf("myshell$");
-        fflush(stdin);
-        t1 = (char *)malloc(80);
-        t2 = (char *)malloc(80);
-        t3 = (char *)malloc(80);
-        t4 = (char *)malloc(80);
-        buff = (char *)malloc(80);
-        fgets(buff, 80, stdin);
-        sscanf(buff, "%s %s %s %s", t1, t2, t3, t4);
-        if (strcmp(t1, "pause") == 0)
-            exit(0);
-        else if (strcmp(t1, "search") == 0)
-            search(t2, t3, t4);
-        else
-        {
-            pid = fork();
-            if (pid < 0)
-                printf("Child process is not created\n");
-            else if (pid == 0)
-            {
-                execlp("/bin", NULL);
-                if (strcmp(t1, "exit") == 0)
-                    exit(0);
-                system(buff);
+
+int main() {
+    char input[MAX_INPUT_SIZE];
+    char *tokens[MAX_TOKENS];
+    const char *prompt = "myshell$ ";
+    
+    while (1) {
+        printf("%s", prompt);
+        if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL) {
+            perror("Error reading input");
+            break;
+        }
+
+        // Tokenize the input
+        int token_count = 0;
+        tokens[token_count] = strtok(input, " \t\n");
+        while (tokens[token_count] != NULL) {
+            token_count++;
+            tokens[token_count] = strtok(NULL, " \t\n");
+        }
+
+        if (token_count == 0) {
+            continue; // Empty input line
+        }
+
+        if (strcmp(tokens[0], "search") == 0) {
+            if (token_count < 4) {
+                printf("Usage: search [f/a/c] <filename> <pattern>\n");
+                continue;
             }
-            else
-            {
-                wait(NULL);
-                exit(0);
-            }
+            
+            int find_first = (tokens[1][0] == 'f');
+            int find_all = (tokens[1][0] == 'a');
+            int count = (tokens[1][0] == 'c');
+            const char *filename = tokens[2];
+            const char *pattern = tokens[3];
+
+            search_pattern(filename, pattern, find_first, find_all, count);
+        } else if (strcmp(tokens[0], "exit") == 0) {
+            break;
+        } else {
+            printf("Command not recognized: %s\n", tokens[0]);
         }
     }
+
+    return 0;
 }
