@@ -6,88 +6,105 @@ myshells search c filename pattern: It will count the number of occurrence of pa
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
+#include <string.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
-#define MAX_INPUT_SIZE 1024
-#define MAX_TOKENS 100
+void separate_tokens(char *cmd, char *tok[]) {
+    int i = 0;
+    char *p;
 
-void search_pattern(const char *filename, const char *pattern, int find_first, int find_all, int count) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        perror("Error opening file");
+    p = strtok(cmd, " ");
+    while (p != NULL) {
+        tok[i++] = p;
+        p = strtok(NULL, " ");
+    }
+    tok[i] = NULL;
+}
+
+void search(char param, char *filename, char *pattern) {
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1) {
+        printf("File %s not found\n", filename);
         return;
     }
 
-    char line[MAX_INPUT_SIZE];
-    int line_number = 0;
-    int pattern_count = 0;
+    char c;
+    char buffer[1024];
+    int bytesRead, count = 0;
+    int patternLength = strlen(pattern);
+    int patternFound = 0;
 
-    while (fgets(line, MAX_INPUT_SIZE, file) != NULL) {
-        line_number++;
-        if (strstr(line, pattern) != NULL) {
-            pattern_count++;
-            if (find_first) {
-                printf("%s: Line %d: %s", filename, line_number, line);
-                break;
-            } else if (find_all) {
-                printf("%s: Line %d: %s", filename, line_number, line);
+    while ((bytesRead = read(fd, buffer, sizeof(buffer))) > 0) {
+        int i;
+        for (i = 0; i < bytesRead; i++) {
+            c = buffer[i];
+            if (c == pattern[patternFound]) {
+                patternFound++;
+                if (patternFound == patternLength) {
+                    if (param == 'f') {
+                        printf("Pattern found in %s\n", filename);
+                        close(fd);
+                        return;
+                    } else if (param == 'a') {
+                        printf("Pattern found at position %d\n", i - patternLength + 1);
+                        patternFound = 0;
+                    } else if (param == 'c') {
+                        count++;
+                        patternFound = 0;
+                    }
+                }
+            } else {
+                patternFound = 0;
             }
         }
     }
 
-    if (count) {
-        printf("Pattern '%s' found %d times in %s.\n", pattern, pattern_count, filename);
+    if (param == 'c') {
+        printf("Pattern count in %s: %d\n", filename, count);
     }
 
-    fclose(file);
+    close(fd);
 }
 
 int main() {
-    char input[MAX_INPUT_SIZE];
-    char *tokens[MAX_TOKENS];
-    const char *prompt = "myshell$ ";
-    
-    while (1) {
-        printf("%s", prompt);
-        if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL) {
-            perror("Error reading input");
-            break;
-        }
+    char cmd[80], *args[10];
+    int pid;
 
-        // Tokenize the input
-        int token_count = 0;
-        tokens[token_count] = strtok(input, " \t\n");
-        while (tokens[token_count] != NULL) {
-            token_count++;
-            tokens[token_count] = strtok(NULL, " \t\n");
-        }
+    system("clear");
 
-        if (token_count == 0) {
-            continue; // Empty input line
-        }
+    do {
+        printf("\nmyshellS$ ");
+        fgets(cmd, 80, stdin);
+        cmd[strlen(cmd) - 1] = '\0';
+        separate_tokens(cmd, args);
 
-        if (strcmp(tokens[0], "search") == 0) {
-            if (token_count < 4) {
-                printf("Usage: search [f/a/c] <filename> <pattern>\n");
-                continue;
+        if (strcmp(args[0], "search") == 0) {
+            if (args[1] && args[2] && args[3]) {
+                if (args[1][0] == 'f' || args[1][0] == 'a' || args[1][0] == 'c') {
+                    search(args[1][0], args[2], args[3]);
+                } else {
+                    printf("Invalid 'search' command format\n");
+                }
+            } else {
+                printf("Invalid 'search' command format\n");
             }
-            
-            int find_first = (tokens[1][0] == 'f');
-            int find_all = (tokens[1][0] == 'a');
-            int count = (tokens[1][0] == 'c');
-            const char *filename = tokens[2];
-            const char *pattern = tokens[3];
-
-            search_pattern(filename, pattern, find_first, find_all, count);
-        } else if (strcmp(tokens[0], "exit") == 0) {
-            break;
         } else {
-            printf("Command not recognized: %s\n", tokens[0]);
+            pid = fork();
+            if (pid > 0) {
+                wait(NULL);
+            } else if (pid == 0) {
+                if (execvp(args[0], args) == -1) {
+                    printf("\nCommand %s not found\n", args[0]);
+                    exit(1);
+                }
+            } else {
+                printf("Fork failed\n");
+                exit(1);
+            }
         }
-    }
+    } while (1);
 
     return 0;
 }
