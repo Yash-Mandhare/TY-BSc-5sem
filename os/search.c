@@ -68,43 +68,27 @@ void search(char param, char *filename, char *pattern) {
     close(fd);
 }
 
-int main() {
-    char cmd[80], *args[10];
-    int pid;
-
-    system("clear");
-
-    do {
-        printf("\nmyshellS$ ");
-        fgets(cmd, 80, stdin);
-        cmd[strlen(cmd) - 1] = '\0';
-        separate_tokens(cmd, args);
-
-        if (strcmp(args[0], "search") == 0) {
-            if (args[1] && args[2] && args[3]) {
-                if (args[1][0] == 'f' || args[1][0] == 'a' || args[1][0] == 'c') {
-                    search(args[1][0], args[2], args[3]);
-                } else {
-                    printf("Invalid 'search' command format\n");
-                }
-            } else {
-                printf("Invalid 'search' command format\n");
-            }
-        } else {
-            pid = fork();
-            if (pid > 0) {
-                wait(NULL);
-            } else if (pid == 0) {
-                if (execvp(args[0], args) == -1) {
-                    printf("\nCommand %s not found\n", args[0]);
-                    exit(1);
-                }
-            } else {
-                printf("Fork failed\n");
-                exit(1);
-            }
-        }
-    } while (1);
-
-    return 0;
+int main() 
+{ 	
+	char cmd[80],*args[10]; 	
+	int pid; 	 	
+	system("clear");	 	
+	do 	
+	{ 		
+		printf("\nMyShell$ "); 		
+		fgets(cmd,80,stdin); 		
+		cmd[strlen(cmd)-1]='\0'; 		
+		separate_tokens(cmd,args); 		
+		if(strcmp(args[0],"search")==0) 			
+			search(args[1][0], args[2], args[3]);	
+		else 		
+		{ 			
+			pid = fork(); 			
+			if(pid > 0) 				
+			wait(0); 			
+			else if(execvp(args[0],args)==-1) 				
+				printf("\n Command %s not found\n",args[0]); 		
+		} 	
+	}while(1); 	
+	return 0; 
 }
