@@ -1,0 +1,33 @@
+<!-- Write a script to accept two integers(Use html form having 2 textboxes).
+Write a PHP script to,
+a. Find mod of the two numbers.
+b. Find the power of first number raised to the second.
+c. Find the sum of first n numbers (considering first number as n)
+d. Find the factorial of second number.
+(Write separate function for each of the above operations.) -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Operations</title>
+</head>
+<body>
+    <h1>Math Operations</h1>
+    <form action="10-twonumber.php" method="post">
+        <label for="num1">Enter the first number:</label>
+        <input type="text" name="num1" id="num1" required>
+        <br>
+        <label for="num2">Enter the second number:</label>
+        <input type="text" name="num2" id="num2" required>
+        <br>
+        <p>Select an operation:</p>
+        <input type="radio" name="operation" value="modulo"> Modulo
+        <input type="radio" name="operation" value="power"> Power
+        <input type="radio" name="operation" value="sum"> Sum
+        <input type="radio" name="operation" value="factorial"> Factorial
+        <br>
+        <input type="submit" value="Calculate">
+    </form>
+</body>
+</html>
+

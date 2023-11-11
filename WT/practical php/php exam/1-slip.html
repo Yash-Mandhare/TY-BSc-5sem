@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      color: #333;
+    }
+
+    form {
+      width: 300px;
+      padding: 20px;
+      background-color: yellow; 
+      color: red; 
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    select {
+      height: 40px;
+    }
+
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    input[type="submit"],
+    input[type="reset"] {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover,
+    input[type="reset"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Exciting Project Form</h1>
+  <form>
+    <label for="projectName">Project Name:</label>
+    <input type="text" id="projectName" name="projectName" placeholder="Enter project name">
+
+    <label for="assignedTo">Assigned to:</label>
+    <select name="assignedTo">
+      <option value="webDeveloper">Web Developer</option>
+      <option value="appDeveloper">App Developer</option>
+      <option value="softwareDeveloper">Software Developer</option>
+    </select>
+
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate">
+
+    <label for="priority">Priority:</label>
+    <input type="radio" name="priority" value="high"> High
+    <input type="radio" name="priority" value="average"> Average
+    <input type="radio" name="priority" value="low"> Low
+
+    <label for="description">Description:</label>
+    <textarea name="description" placeholder="Enter project description"></textarea>
+
+    <input type="submit" value="Submit">
+    <input type="reset" value="Clear">
+  </form>
+</

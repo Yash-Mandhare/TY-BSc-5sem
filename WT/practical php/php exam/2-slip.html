@@ -1,0 +1,56 @@
+<!-- Create HTML5 page with following specifications [15]
+i) Title should be about your City.
+ii) Color the background by Pink color.
+iii) Place your city name at the top of page in large text and in blue color.
+iv) Add names of the landmarks in your city, each in different color, style and font
+v) Add any image at the bottom. (Use inline CSS to format the web page) -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>About My City</title>
+  <style>
+    body {
+      background-color: pink;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    #city-name {
+      font-size: 36px;
+      color: blue;
+      margin-top: 20px;
+    }
+
+    .landmark {
+      font-size: 24px;
+      margin: 10px;
+    }
+
+    #landmark1 {
+      color: green;
+      font-style: italic;
+    }
+
+    #landmark2 {
+      color: purple;
+      font-weight: bold;
+    }
+
+    #landmark3 {
+      color: orange;
+      font-family: 'inter', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="city-name">Welcome to My City</h1>
+
+  <p class="landmark" id="landmark1">Landmark 1: Beautiful Park</p>
+  <p class="landmark" id="landmark2">Landmark 2: Historic Museum</p>
+  <p class="landmark" id="landmark3">Landmark 3: Vibrant Market</p>
+
+  <img src="your-city-image.jpg" style="width: 80%; max-width: 800px; display: block; margin: 20px auto;" alt="City Image">
+</body>
+</html>

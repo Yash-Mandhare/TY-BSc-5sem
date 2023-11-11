@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>String Operations</title>
+</head>
+<body>
+    <h1>String Operations</h1>
+    <form method="post" action="15-sting.php">
+        <label for="input_string">Enter a string:</label>
+        <input type="text" id="input_string" name="input_string" required><br>
+
+        <label>Select an operation:</label><br>
+        <input type="radio" id="operation_first_five_words" name="operation" value="first_five_words">
+        <label for="operation_first_five_words">Select first 5 words and display the five characters</label><br>
+
+        <input type="radio" id="operation_lowercase" name="operation" value="lowercase">
+        <label for="operation_lowercase">Convert to lowercase</label><br>
+
+        <input type="radio" id="operation_title_case" name="operation" value="title_case">
+        <label for="operation_title_case">Convert to Title case</label><br>
+
+        <input type="radio" id="operation_pad" name="operation" value="pad">
+        <label for="operation_pad">Pad with '*' from left and right</label><br>
+
+        <input type="radio" id="operation_remove_whitespace" name="operation" value="remove_whitespace">
+        <label for="operation_remove_whitespace">Remove leading whitespaces</label><br>
+
+        <input type="radio" id="operation_reverse" name="operation" value="reverse">
+        <label for="operation_reverse">Find the reverse of the string</label><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!-- Q.1) Design an HTML form to accept two strings from the user. Write a PHP script for the
+following.
+a. Find whether the small string appears at the start of the large string.
+b. Find the position of the small string in the big string.
+c. Compare both the string for first n characters, also the comparison should not be case
+sensitive. -->
+
+<html>
+<body>
+	<form method=POST action="8-string.php">
+		Enter large string: <input type=text name="s1"> <br>
+		Enter small string: <input type=text name="s2"> <br>
+
+		Enter your choice:<br>
+		<input type=radio name="r" value=1>Check if string appears at start<br>
+		<input type=radio name="r" value=2>Position of string <br>
+		<input type=radio name="r" value=3>Compare strings for first n characters ---------- Enter the number <input type="text" name="n"><br>
+
+		<input type=submit value="Result">
+	</form>
+</body>
+</html>

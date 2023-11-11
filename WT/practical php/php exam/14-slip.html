@@ -1,0 +1,37 @@
+<!-- Create a container add row inside it and add 3 columns inside row using -->
+
+<!DOCTYPE html>
+<html>
+<head>
+   <style>/* Define a container class */
+    .container {
+        width: 100%;
+        max-width: 1200px; /* You can adjust the maximum width as per your design */
+        margin: 0 auto; /* Center the container on the page */
+    }
+    
+    /* Define a row class with flex display for columns */
+    .row {
+        display: flex;
+        justify-content: space-between; /* Space columns evenly within the row */
+    }
+    
+    /* Define column classes and set their width */
+    .column {
+        flex: 1; /* Equal width for all columns */
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="column">Column 1</div>
+            <div class="column">Column 2</div>
+            <div class="column">Column 3</div>
+        </div>
+    </div>
+</body>
+</html>
