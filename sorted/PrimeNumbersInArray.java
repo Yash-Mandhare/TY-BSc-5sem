@@ -3,56 +3,38 @@
 
 import java.util.Scanner;
 
-class PrimeNumbersInRange {
- 
-    // Function to print all the
-    // prime numbers till N
-    static void prime_N(int N)
-    {
-        // Declaring the variables
-        int x, y, flg;
- 
-        // Printing display message
-        System.out.println(
-            "All the Prime numbers within 1 and " + N
-            + " are:");
- 
-        // Using for loop for traversing all
-        // the numbers from 1 to N
-        for (x = 1; x <= N; x++) {
- 
-            // Omit 0 and 1 as they are
-            // neither prime nor composite
-            if (x == 1 || x == 0)
-                continue;
- 
-            // Using flag variable to check
-            // if x is prime or not
-            flg = 1;
- 
-            for (y = 2; y <= x / 2; ++y) {
-                if (x % y == 0) {
-                    flg = 0;
+public class PrimeNumbersInArray {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of elements in the array: ");
+        int n = scanner.nextInt();
+
+        int[] array = new int[n];
+
+        System.out.println("Enter the elements of the array: ");
+        for (int i = 0; i < n; i++) {
+            array[i] = scanner.nextInt();
+        }
+
+        // Loop through each element in the array
+        for (int i = 0; i < n; i++) {
+            boolean isPrime = true;
+
+            // Check if the current element is a prime number
+            for (int j = 2; j * j <= array[i]; j++) {
+                if (array[i] % j == 0) {
+                    isPrime = false;
                     break;
                 }
             }
- 
-            // If flag is 1 then x is prime but
-            // if flag is 0 then x is not prime
-            if (flg == 1)
-                System.out.print(x + " ");
+
+            // Display the prime numbers
+            if (isPrime && array[i] > 1) {
+                System.out.println(array[i] + " is a prime number");
+            }
         }
-    }
- 
-    // The Driver code
-    public static void main(String[] args)
-    {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the value of N: ");
-        int N = scanner.nextInt();
- 
-        prime_N(N);
-        
-        scanner.close();
+
+        scanner.close(); // Close the scanner to prevent resource leak
     }
 }
