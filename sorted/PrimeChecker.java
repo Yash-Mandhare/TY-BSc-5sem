@@ -3,50 +3,32 @@
 
 import java.util.Scanner;
 
-class PrimeNumberException extends Exception {
-    public PrimeNumberException(String message) {
-        super(message);
-    }
-}
-
-public class PrimeChecker {
-    public static void main(String[] args) {
+public class PrimeExample {
+    public static void main(String args[]) {
         Scanner scanner = new Scanner(System.in);
 
-        try {
-            System.out.print("Enter a number: ");
-            int number = scanner.nextInt();
+        System.out.print("Enter a number to check if it's prime: ");
+        int n = scanner.nextInt();
 
-            if (number == 0) {
-                throw new PrimeNumberException("Number is 0");
+        int i, m = 0, flag = 0;
+        m = n / 2;
+
+        if (n == 0 || n == 1) {
+            System.out.println(n + " is not a prime number");
+        } else {
+            for (i = 2; i <= m; i++) {
+                if (n % i == 0) {
+                    System.out.println(n + " is not a prime number");
+                    flag = 1;
+                    break;
+                }
             }
-
-            if (isPrime(number)) {
-                System.out.println(number + " is a prime number.");
-            } else {
-                System.out.println(number + " is not a prime number.");
-            }
-        } catch (PrimeNumberException e) {
-            System.out.println("Exception: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Invalid input. Please enter a valid number.");
-        } finally {
-            scanner.close();
-        }
-    }
-
-    // Static method to check whether a number is prime
-    private static boolean isPrime(int number) {
-        if (number <= 1) {
-            return false;
-        }
-
-        for (int i = 2; i <= Math.sqrt(number); i++) {
-            if (number % i == 0) {
-                return false;
+            if (flag == 0) {
+                System.out.println(n + " is a prime number");
             }
         }
 
-        return true;
+        scanner.close(); // Close the scanner to prevent resource leak
     }
 }
+
